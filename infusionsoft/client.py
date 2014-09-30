@@ -1,6 +1,6 @@
 from xmlrpclib import ServerProxy, Fault
 import requests
-
+from datetime import datetime
 
 class Infusionsoft(object):
     def __init__(self, name, api_key):
@@ -100,8 +100,7 @@ class Infusionsoft(object):
         return record.get('OwnerID')
 
     def place_order(self, contact_id, product_ids):
-        self.client.OrderService.placeOrder(
-            self.key,      #str
+        return self.client.OrderService.placeOrder(self.key,      #str
             contact_id,    #int
             0,             #int
             0,             #int
@@ -132,5 +131,11 @@ class Infusionsoft(object):
     def data_load(self,table,id,fields):
         return self.client.DataService.load(self.key,table,id, fields)
 
-    def data_findByField(self,table,fieldName,fieldValue,fields,limit=100,page=1):
+    def data_findByField(self,table,fieldName,fieldValue,fields,limit=100,page=0):
         return self.client.DataService.findByField(self.key,table,limit,page,fieldName,fieldValue,fields)
+
+    def data_query(self,table,query_dict,fields,limit=100,page=0):
+        return self.client.DataService.query(self.key,table,limit,page,query_dict,fields)
+
+    def createBlankOrder(self,contactId,description='',orderDate=datetime.now(),leadAffiliateId=0,saleAffiliateId=0):
+        return self.client.InvoiceService.createBlankOrder(self.key,table,limit,page,fieldName,fieldValue,fields)
