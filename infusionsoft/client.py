@@ -138,4 +138,40 @@ class Infusionsoft(object):
         return self.client.DataService.query(self.key,table,limit,page,query_dict,fields)
 
     def createBlankOrder(self,contactId,description='',orderDate=datetime.now(),leadAffiliateId=0,saleAffiliateId=0):
-        return self.client.InvoiceService.createBlankOrder(self.key,table,limit,page,fieldName,fieldValue,fields)
+        return self.client.InvoiceService.createBlankOrder(self.key,contactId,description,orderDate,leadAffiliateId,saleAffiliateId)
+
+    def addOrderItem(self,invoiceId,productId,price,quantity=1,description='',notes='',type=4):
+        """
+            Type ID	Description
+            1	Shipping
+            2	Tax
+            3	Service & Misc
+            4	Product
+            5	Upsell Product
+            6	Finance Charge
+            7	Special
+            8	Program
+            9	Subscription Plan
+            10	Special: Free Trial Days
+            12	Special: Order Total
+            12	Special: Product
+            13	Special: Category
+            14	Special: Shipping
+        """
+        return self.client.InvoiceService.addOrderItem(self.key,
+                                                       int(invoiceId),
+                                                       int(productId),
+                                                       int(type),
+                                                       float(price),
+                                                       int(quantity),
+                                                       description,
+                                                       notes)
+
+    def addManualPayment(self,invoiceId,amount,paymentType,paymentDescription,paymentDate=datetime.now(),bypassCommissions=False):
+        return self.client.InvoiceService.addManualPayment(self.key,invoiceId,float(amount),paymentDate,paymentType,paymentDescription,bypassCommissions)
+
+    def removeFromGroup(self,contactId,tagId):
+        return self.client.ContactService.removeFromGroup(self.key,int(contactId),int(tagId))
+
+    def addToGroup(self,contactId,tagId):
+        return self.client.ContactService.addToGroup(self.key,int(contactId),int(tagId))
